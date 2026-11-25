@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>Container scroll fixture</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+      .app {
+        display: flex;
+        height: 100vh;
+      }
+      nav {
+        width: 180px;
+        background: #eee;
+      }
+      #feed {
+        flex: 1;
+        overflow-y: auto;
+        height: 100vh;
+      }
+      .item {
+        height: 380px;
+        border-bottom: 3px solid #333;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      .topbar {
+        position: sticky;
+        top: 0;
+        height: 48px;
+        background: #bee3ff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <nav>侧栏</nav>
+      <div id="feed">
+        <div class="topbar">容器内 sticky 顶栏</div>
+      </div>
+    </div>
+    <script>
+      const feed = document.getElementById('feed');
+      for (let i = 0; i < 18; i++) {
+        const d = document.createElement('div');
+        d.className = 'item';
+        d.textContent = '卡片 ' + i;
+        feed.appendChild(d);
+      }
+      // What the end-to-end checks measure the stitched image against.
+      window.__FIXTURE__ = { card: 380, topbar: 48, total: 18 };
+    </script>
+  </body>
+</html>

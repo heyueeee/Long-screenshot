@@ -1,0 +1,338 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1b1f24;
+  --muted: #6b7280;
+  --line: #e6e8ec;
+  --accent: #2f6bff;
+  --accent-soft: #eef3ff;
+  --danger: #d43d3d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1d21;
+    --fg: #e8eaed;
+    --muted: #9aa1ab;
+    --line: #303439;
+    --accent: #5b8cff;
+    --accent-soft: #232a3a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font: 13px/1.5 system-ui, "Segoe UI", "Microsoft YaHei", sans-serif;
+  color: var(--fg);
+  background: #2a2d31;
+}
+
+/* One sticky block for the header and the annotation toolbar: the pinned canvas
+ * measures this element to know where it has to start, so no height is guessed. */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--bg);
+}
+
+header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.brand {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+
+.brand img {
+  width: 28px;
+  height: 28px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+#meta {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  padding: 7px 12px;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+button.primary:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--fg);
+}
+
+button.ghost:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.notice {
+  margin: 10px 16px 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--fg);
+  font-size: 12.5px;
+}
+
+.notice.bad {
+  background: #fdeeee;
+  color: var(--danger);
+}
+
+@media (prefers-color-scheme: dark) {
+  .notice.bad {
+    background: #3a2426;
+  }
+}
+
+.file {
+  margin: 8px 16px 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 11.5px;
+  word-break: break-all;
+}
+
+.parts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 16px;
+}
+
+.parts figure {
+  margin: 0;
+  max-width: 1100px;
+  width: 100%;
+}
+
+.stage {
+  position: relative;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* The canvas stays pinned to the viewport and only paints the slice that is on
+ * screen, which is the only way a 30 000 px part scrolls smoothly. */
+.surface {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+.canvas {
+  display: block;
+  touch-action: pan-x pan-y;
+  cursor: crosshair;
+}
+
+.editor {
+  position: absolute;
+  z-index: 3;
+  min-height: 34px;
+  padding: 4px 6px;
+  border: 1px dashed var(--accent);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #111;
+  font-family: system-ui, "Microsoft YaHei", sans-serif;
+  line-height: 1.25;
+  resize: both;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.annCaption {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 11.5px;
+  word-break: break-all;
+}
+
+/* ------------------------------------------------------------------ toolbar */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  padding: 8px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.toolbar[hidden] {
+  display: none;
+}
+
+.tGroup {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.tGroup > button {
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: #f2f4f7;
+  border-color: var(--line);
+}
+
+.tGroup > button.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.tGroup > button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.tLabel {
+  color: var(--muted);
+  font-size: 11.5px;
+  padding: 0 4px;
+  white-space: nowrap;
+  min-width: 46px;
+  text-align: center;
+}
+
+.swatch {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+}
+
+.swatch.on {
+  border-color: var(--fg);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.picker {
+  width: 26px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: none;
+  cursor: pointer;
+}
+
+.tGroup input[type="range"] {
+  width: 74px;
+  accent-color: var(--accent);
+}
+
+.tGroup.zoomBox > button {
+  min-width: 30px;
+}
+
+
+/* ---------------------------------------------------------------- 文字识别 */
+
+.ocrPanel {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(430px, calc(100vw - 36px));
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.ocrHead {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ocrHead > button {
+  margin-left: auto;
+  padding: 2px 8px;
+  line-height: 1.4;
+}
+
+.ocrScope {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.ocrStatus {
+  min-height: 18px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.ocrPanel textarea {
+  width: 100%;
+  height: 42vh;
+  min-height: 120px;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 12.5px/1.7 ui-monospace, Consolas, monospace;
+  resize: vertical;
+}
+
+.ocrFoot {
+  display: flex;
+  gap: 8px;
+}

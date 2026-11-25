@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>Long page fixture</title>
+    <style>
+      body {
+        margin: 0;
+        font: 16px system-ui;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        height: 64px;
+        background: #ffe58a;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        z-index: 5;
+      }
+      .fab {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #e63946;
+        z-index: 9;
+      }
+      .block {
+        height: 420px;
+        border-bottom: 2px solid #ccc;
+        padding: 12px 20px;
+        box-sizing: border-box;
+      }
+      .block:nth-child(even) {
+        background: #f3f7ff;
+      }
+      #tail {
+        height: 200px;
+        background: #d8f5d0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>Sticky 顶栏（应被隐藏）</header>
+    <div class="fab"></div>
+    <main id="main"></main>
+    <div id="tail">页尾</div>
+    <script>
+      const main = document.getElementById('main');
+      const render = (n, from) => {
+        for (let i = from; i < from + n; i++) {
+          const d = document.createElement('div');
+          d.className = 'block';
+          d.textContent = '段落 ' + i + ' · ' + '内容'.repeat(30);
+          main.appendChild(d);
+        }
+      };
+      render(12, 0);
+      // 模拟无限滚动：接近底部时追加内容
+      window.addEventListener('scroll', () => {
+        if (window.scrollY + window.innerHeight > document.body.scrollHeight - 500) {
+          if (main.children.length < 26) render(4, main.children.length);
+        }
+      });
+    </script>
+  </body>
+</html>

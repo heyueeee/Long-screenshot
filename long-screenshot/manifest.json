@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Long Shot 整页长截图",
+  "version": "1.5.6",
+  "description": "自动滚动网页、逐屏截图并按绝对位置拼接，一键导出整页长图（PNG / JPEG），可框选、标注、识别文字。",
+  "permissions": ["tabs", "scripting", "downloads", "storage", "offscreen", "clipboardWrite"],
+  "host_permissions": ["<all_urls>"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "background": { "service_worker": "background.js" },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "整页长截图",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "commands": {
+    "capture-full-page": {
+      "suggested_key": { "default": "Alt+Shift+S" },
+      "description": "对当前标签页开始整页长截图"
+    },
+    "capture-region": {
+      "suggested_key": { "default": "Alt+Shift+R" },
+      "description": "在页面里框选一块区域再截图"
+    }
+  }
+}

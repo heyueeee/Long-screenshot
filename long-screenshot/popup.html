@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>Long Shot 整页长截图</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <img src="icons/icon48.png" alt="" />
+        <div>
+          <h1>整页长截图</h1>
+          <p id="pageInfo">读取当前页面…</p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="options" id="options">
+        <div class="row two">
+          <label>
+            <span>输出格式</span>
+            <select id="format">
+              <option value="png">PNG（无损）</option>
+              <option value="jpeg">JPEG（体积小）</option>
+            </select>
+          </label>
+          <label>
+            <span>清晰度</span>
+            <select id="scale">
+              <option value="device">跟随屏幕</option>
+              <option value="1">1× 标准</option>
+              <option value="2">2× 超清</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="slider">
+          <span>每屏重叠 <b id="overlapValue">120</b> px</span>
+          <input id="overlap" type="range" min="40" max="400" step="10" value="120" />
+        </label>
+
+        <label class="slider">
+          <span>每屏等待 <b id="waitValue">500</b> ms</span>
+          <input id="waitMs" type="range" min="500" max="3000" step="100" value="500" />
+        </label>
+
+        <label class="check">
+          <input id="preload" type="checkbox" checked />
+          <span>先预滚动整页，触发图片懒加载（推荐）</span>
+        </label>
+        <label class="check">
+          <input id="hideFixed" type="checkbox" checked />
+          <span>隐藏固定/吸附的工具条、悬浮按钮</span>
+        </label>
+        <label class="check">
+          <input id="dedupe" type="checkbox" checked />
+          <span>合并页面没有再前进的重复屏（到底、吸附回弹）</span>
+        </label>
+        <label class="check">
+          <input id="saveAs" type="checkbox" />
+          <span>下载前询问保存位置</span>
+        </label>
+      </section>
+
+      <section class="range">
+        <div class="rangeHead">
+          <span>截图范围</span>
+          <b id="rangeInfo">整页</b>
+        </div>
+        <div class="rangeButtons">
+          <button id="pickRegion" class="ghost">在页面里框选</button>
+          <button id="markStart" class="ghost">把当前位置设为起点</button>
+          <button id="markEnd" class="ghost">把当前位置设为终点</button>
+          <button id="clearRange" class="link">清除</button>
+        </div>
+        <p class="rangeHint">
+          <b>框选</b>：在页面里拖出一个矩形，或单击选中某个元素（滚轮可切到它的父/子元素），按 Enter 开始截图 —— 长图只包含这个矩形所在的横条和竖段。<br>
+          <b>起点/终点</b>：自己滚动到想开始的位置 → 点「设为起点」→ 再滚到结束位置 → 点「设为终点」→ 开始长截图。点按钮后弹窗会关闭，滚动完重新打开即可；只标记一个点时按整页处理。快捷键 <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> 始终截整页。
+        </p>
+        <p id="rangeNote" class="rangeNote" hidden></p>
+      </section>
+
+      <section class="progress" id="progress" hidden>
+        <div class="bar"><i id="bar"></i></div>
+        <p id="phase">准备中…</p>
+      </section>
+
+      <section class="result" id="result" hidden>
+        <img id="thumb" alt="长图预览（顶部）" />
+        <p id="file" class="file"></p>
+        <p id="message" class="message"></p>
+        <p id="shotHint" class="shotHint" hidden></p>
+        <div class="resultButtons">
+          <button id="edit" class="ghost">标注 / 新标签页打开</button>
+          <button id="copy" class="ghost">复制到剪贴板</button>
+          <button id="reveal" class="ghost">打开所在文件夹</button>
+        </div>
+      </section>
+
+      <div id="stale" class="stale" hidden>
+        <p>后台脚本没有被替换：弹窗是磁盘上的新版本，而 Chrome 里仍在运行旧版 service worker，所以结果不可信。最可靠的办法是让扩展重新注册一次。</p>
+        <button id="reloadExt" class="ghost">立即重新加载扩展</button>
+        <p class="alt">或者在 <b>chrome://extensions</b> 把本扩展的开关关掉再打开（仅点 ↻ 有时不会替换 worker），然后重新打开这个弹窗。</p>
+      </div>
+
+      <p id="error" class="error" hidden></p>
+    </main>
+
+    <footer>
+      <button id="start" class="primary">开始长截图</button>
+      <button id="stop" class="ghost" disabled>停止</button>
+      <button id="toggleAdvanced" class="link">收起设置</button>
+    </footer>
+
+    <p class="hint">
+      快捷键 <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> 可直接对当前页面截图 ·
+      <span id="buildLabel"></span>
+    </p>
+
+    <script src="output.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

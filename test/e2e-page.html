@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>Long Shot 端到端夹具</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: system-ui, "Microsoft YaHei", sans-serif; color: #111; background: #fff; }
+      header {
+        position: sticky; top: 0; height: 64px; z-index: 5;
+        background: #ffe58a; display: flex; align-items: center; padding: 0 20px; font-size: 22px;
+      }
+      .fab { position: fixed; right: 24px; bottom: 24px; width: 56px; height: 56px; border-radius: 50%; background: #e63946; }
+      section {
+        height: 480px; padding: 40px 32px; border-bottom: 3px solid #111;
+      }
+      section:nth-child(even) { background: #f4f8ff; }
+      h2 { margin: 0 0 18px; font-size: 52px; line-height: 1.1; }
+      p { margin: 0 0 14px; font-size: 34px; line-height: 1.5; }
+      .en { font-size: 30px; color: #1d4ed8; }
+    </style>
+  </head>
+  <body>
+    <header id="bar">长截图夹具 · 吸顶栏</header>
+    <div class="fab" id="fab"></div>
+    <main id="main"></main>
+    <script>
+      const MAIN = document.getElementById('main');
+      /* ?anim=1 makes the page move its own scroll: smooth scrolling plus snap points,
+       * the two things that make the painted rows disagree with the scrollTop the
+       * driver just read. Real docs, chat panes and carousels do exactly this. */
+      if (/[?&]anim=1/.test(location.search)) {
+        const st = document.createElement('style');
+        st.textContent = 'html{scroll-behavior:smooth;scroll-snap-type:y proximity}section{scroll-snap-align:start}';
+        document.head.appendChild(st);
+        document.title = 'Long Shot 端到端夹具（自行动画）';
+      }
+      const SENTENCES = [
+        '床前明月光，疑是地上霜。',
+        '白日依山尽，黄河入海流。',
+        '春眠不觉晓，处处闻啼鸟。',
+        '红豆生南国，春来发几枝。',
+        '空山不见人，但闻人语响。',
+        '举头望明月，低头思故乡。',
+        '独在异乡为异客，每逢佳节倍思亲。',
+        '千山鸟飞绝，万径人踪灭。',
+        '海上生明月，天涯共此时。',
+        '落霞与孤鹜齐飞，秋水共长天一色。',
+        '两岸猿声啼不住，轻舟已过万重山。',
+        '会当凌绝顶，一览众山小。'
+      ];
+      const TOTAL = 24;
+      for (let i = 0; i < TOTAL; i += 1) {
+        const n = String(i + 1).padStart(2, '0');
+        const s = document.createElement('section');
+        s.id = `s-${n}`;
+        const h = document.createElement('h2');
+        h.textContent = `第 ${n} 段`;
+        const p = document.createElement('p');
+        p.textContent = SENTENCES[i % SENTENCES.length];
+        const en = document.createElement('p');
+        en.className = 'en';
+        en.textContent = `paragraph marker ${n} of ${TOTAL}`;
+        s.append(h, p, en);
+        MAIN.appendChild(s);
+      }
+      window.__FIXTURE__ = { total: TOTAL, sectionHeight: 480, headerHeight: 64 };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>Long Shot · 长图结果</title>
+    <link rel="stylesheet" href="edit.css" />
+  </head>
+  <body>
+    <div class="topbar">
+      <header>
+        <div class="brand">
+          <img src="icons/icon48.png" alt="" />
+          <div>
+            <h1>长图结果</h1>
+            <p id="meta">读取中…</p>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="copy" class="ghost" disabled>复制原图</button>
+          <button id="copyAnno" class="ghost" disabled>复制标注图</button>
+          <button id="ocr" class="ghost" disabled>识别文字</button>
+          <button id="export" class="primary" disabled>导出文件</button>
+        </div>
+      </header>
+
+      <div id="toolbar" class="toolbar" hidden></div>
+    </div>
+
+    <p id="notice" class="notice" hidden></p>
+    <p id="file" class="file" hidden></p>
+    <main id="parts" class="parts"></main>
+
+    <aside id="ocrPanel" class="ocrPanel" hidden>
+      <div class="ocrHead">
+        <strong>文字识别</strong>
+        <span id="ocrScope" class="ocrScope"></span>
+        <button id="ocrClose" class="ghost" title="关闭并释放引擎">✕</button>
+      </div>
+      <p id="ocrStatus" class="ocrStatus">首次识别要先加载模型（约 10 秒）。</p>
+      <textarea id="ocrText" readonly spellcheck="false" placeholder="识别结果会出现在这里"></textarea>
+      <div class="ocrFoot">
+        <button id="ocrCopy" class="primary" disabled>复制文字</button>
+        <button id="ocrSave" class="ghost" disabled>下载 .txt</button>
+      </div>
+    </aside>
+
+    <script src="output.js"></script>
+    <script src="annotate.js"></script>
+    <script src="ocr/tesseract.min.js"></script>
+    <script src="ocr.js"></script>
+    <script src="edit.js"></script>
+  </body>
+</html>
